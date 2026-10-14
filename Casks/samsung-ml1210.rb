@@ -9,7 +9,7 @@ cask "samsung-ml1210" do
 
   pkg "SamsungML1210Driver-#{version}.pkg"
 
-  uninstall_preflight do
+  uninstall_preflight_steps do
     system_command "/usr/sbin/lpadmin",
                    args: ["-x", "ML-1210"],
                    sudo: true,
