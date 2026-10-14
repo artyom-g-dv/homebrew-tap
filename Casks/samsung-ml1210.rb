@@ -9,18 +9,14 @@ cask "samsung-ml1210" do
 
   pkg "SamsungML1210Driver-#{version}.pkg"
 
-  uninstall_preflight_steps do
-    system_command "/usr/sbin/lpadmin",
-                   args: ["-x", "ML-1210"],
-                   sudo: true,
-                   must_succeed: false
-  end
-
   uninstall pkgutil: "com.samsunggdi.ml1210",
             delete:  "/usr/libexec/cups/filter/samsunggdi"
 
-  caveats "Plug in the printer over USB; the 'ML-1210' print queue is created " \
-          "automatically at install. If you install while it is unplugged, run: " \
-          "sudo lpadmin -p ML-1210 -E -v \"$(lpinfo -v | awk 'tolower($0) ~ /usb.*samsung/ {print $2; exit}')\" " \
-          "-P /Library/Printers/PPDs/Contents/Resources/Samsung-ML-1210-gdi.ppd"
+  caveats do
+    <<~EOS
+      Plug in the printer over USB; the "ML-1210" print queue is created
+      automatically at install. To remove it fully:
+        sudo lpadmin -x ML-1210
+    EOS
+  end
 end
